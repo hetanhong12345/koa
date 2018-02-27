@@ -8,6 +8,7 @@ const Redis = require('../utils/redis-client');
 const uuidV4 = require('uuid/v4');
 const userService = require('../services/user');
 const func = require('../utils/func');
+const {transporter} = require('../utils/email');
 
 const user = {};
 const cookieProps = {
@@ -102,6 +103,24 @@ user.openAccount = async (ctx) => {
     let sessionId = ctx.cookies.get('koa_session');
     Redis.hmset(sessionId, info, 'EX', 60 * 60 * 1);
     return info;
+};
+user.sendEmail = async () => {
+    var mailOptions = {
+        from: '543039822@qq.com',
+        to: '2950550109@qq.com',
+        subject: 'Sending Email using Node.js',
+        text: 'That was easy!'
+    };
+    return new Promise((resolve, reject) => {
+        return transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+                console.log(err);
+                return reject('send email error');
+            }
+            resolve('Email sent: ' + info.response);
+
+        });
+    });
 };
 
 /*

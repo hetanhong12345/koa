@@ -3,20 +3,11 @@
  */
 const User = require('../models/user');
 const Account = require('../models/account');
-const Redis = require('../utils/redis-client');
-const uuidV4 = require('uuid/v4');
 const bookshelf = require('../bs');
-
-const cookieProps = {
-    domain: 'zj-hf.cn',  // 写cookie所在的域名
-    maxAge: 60 * 60 * 1000, // cookie有效时长
-    httpOnly: true,  // 是否只用于http请求中获取
-    overwrite: false  // 是否允许重写
-};
 const user = {};
 user.register = async (data) => {
     let {mobile, password, user_name} = data;
-    let users = await new User({mobile}).fetch()
+    let users = await new User({mobile}).fetch();
     if (users) {
         return {
             code: 402,

@@ -25,4 +25,7 @@ user.post('/openAccount', async (ctx) => {
     return userController.openAccount(ctx);
 
 });
+user.post('/sendEmail', async (ctx) => {
+    return userController.sendEmail(ctx);
+})
 module.exports = user;
