@@ -106,8 +106,8 @@ user.openAccount = async (ctx) => {
 };
 user.sendEmail = async () => {
     var mailOptions = {
-        from: '543039822@qq.com',
-        to: '2950550109@qq.com',
+        from: '"何大炮" <13720057698@sina.cn>',
+        to: 'hetanhong@zj-inv.cn',
         subject: 'Sending Email using Node.js',
         text: 'That was easy!'
     };

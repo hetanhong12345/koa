@@ -6,13 +6,11 @@
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-    host: 'smtp.qq.com',
-    //secureConnection: true, // use SSL
-    port: 465,
+    host: 'smtp.sina.cn',
     secure: true,
     auth: {
-        user: '543039822@qq.com',//axtsqknhhldxbbcg
-        pass: 'jmexvobfmfbbbfeh'  //rfwcyjfspflfbeef
+        user: '13720057698@sina.cn',//axtsqknhhldxbbcg
+        pass: 'hxx123456'  //rfwcyjfspflfbeef
     }
 });
 module.exports = {
