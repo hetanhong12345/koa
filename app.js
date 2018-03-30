@@ -19,7 +19,7 @@ const bodyParser = require('koa-bodyparser');
 app.use(bodyParser());
 
 // run socket ;
-const server = http.createServer(app.callback())
+const server = http.createServer(app.callback());
 socket.run(server);
 // init routes ;
 routes.init(app);

@@ -6,7 +6,7 @@ const Redis = require('./redis-client');
 
 module.exports = () => {
     return async (ctx, next) => {
-        let session = ctx.cookies.get('koa_session');
+        let session = ctx.cookies.get('Authentication');
         if (!session) {
             return {
                 code: 401,

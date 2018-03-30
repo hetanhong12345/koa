@@ -12,7 +12,7 @@ const {transporter} = require('../utils/email');
 
 const user = {};
 const cookieProps = {
-    domain: 'zj-hf.cn',  // 写cookie所在的域名
+    // domain: 'zj-hf.cn',  // 写cookie所在的域名
     maxAge: 60 * 60 * 1000, // cookie有效时长
     httpOnly: true,  // 是否只用于http请求中获取
     overwrite: false  // 是否允许重写
@@ -43,7 +43,7 @@ user.register = async (ctx) => {
     userInfo = userInfo.toJSON();
     let sessionId = uuidV4();
     updateSession(userInfo.uuid, sessionId);
-    ctx.cookies.set('koa_session', sessionId, cookieProps);
+    ctx.cookies.set('Authentication', sessionId, cookieProps);
     Redis.hmset(sessionId, userInfo);
     return userInfo;
 };
@@ -73,16 +73,16 @@ user.login = async (ctx) => {
     let sessionId = uuidV4();
     let {uuid} = userInfo;
     updateSession(uuid, sessionId);
-    ctx.cookies.set('koa_session', sessionId, cookieProps);
+    ctx.cookies.set('Authentication', sessionId, cookieProps);
     Redis.hmset(sessionId, userInfo, 'EX', 60 * 60 * 1);
     return userInfo;
 };
 user.logout = async (ctx) => {
-    let session = ctx.cookies.get('koa_session');
+    let session = ctx.cookies.get('Authentication');
     Redis.del(session);
     let logoutCookie = {...cookieProps};
     logoutCookie.maxAge = 0;
-    ctx.cookies.set('koa_session', '', logoutCookie);
+    ctx.cookies.set('Authentication', '', logoutCookie);
     return 'ok';
 };
 user.userInfo = async (ctx) => {
@@ -100,7 +100,7 @@ user.openAccount = async (ctx) => {
     let info = await userService.openAccount(userInfo.uuid);
     // 更新redis 用户信息
     info = info.toJSON();
-    let sessionId = ctx.cookies.get('koa_session');
+    let sessionId = ctx.cookies.get('Authentication');
     Redis.hmset(sessionId, info, 'EX', 60 * 60 * 1);
     return info;
 };

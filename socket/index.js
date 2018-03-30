@@ -13,19 +13,22 @@ function run(app) {
         pingTimeout: 5000,
         cookie: true
     });
-    io.origins((origin, callback) => {
-        callback(null, true);
-    });
     io.use(cookieParser());
     io.use((socket, next) => {
+        console.log(socket.request.cookies);
 
-        console.log(socket.request.cookies)
-        next();
+        if (socket.request.cookies.Authentication) {
+            next();
+        } else {
+            next(new Error('Authentication error'));
+        }
+
+
         // ...
     });
 
     io.on('connection', (socket) => {
-        // console.log(socket);
+        console.log(socket.id);
         // ...
 
         socket.on('hello', (data) => {
