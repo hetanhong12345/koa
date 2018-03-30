@@ -3,8 +3,12 @@
  */
 const bs = require('../bs');
 const uuidV4 = require('uuid/v4');
+const token = require('./token');
 const User = bs.Model.extend({
     tableName: 'users',
+    token: function () {
+        return this.belongsTo(token, 'uuid', 'user_uuid');
+    },
     constructor: function () {
         bs.Model.apply(this, arguments);
         this.on('creating', (model, attrs, options) => {
