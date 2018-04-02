@@ -3,8 +3,9 @@
  */
 const Router = require('koa-router');
 const trade = new Router();
-const loginRequired = require('../utils/login-required');
 const tradeController = require('../controllers/trade');
+const {loginRequired} = require('../middlewares');
+
 
 trade.use(loginRequired());
 trade.get('/billList', async (ctx) => {

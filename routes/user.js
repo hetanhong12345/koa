@@ -4,7 +4,7 @@
 const Router = require('koa-router');
 const user = new Router();
 const userController = require('../controllers/user');
-const loginRequired = require('../utils/login-required');
+const {loginRequired} = require('../middlewares');
 
 user.post('/register', async (ctx) => {
     return userController.register(ctx);
