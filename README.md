@@ -24,17 +24,17 @@ pm2 start run.config.js --only dev
 ```
 knex migrate:latest --env production
 
-pm2 start run.config.js --only production 
+pm2 start run.config.js --only build
 ```
 
-## knex 
+## knex
 * create knexfile
-```bash 
-knex init 
+```bash
+knex init
 ```
 * create migrations
 
-```bash 
+```bash
 knex migrate:make migrate name
 ```
 * create/update table
