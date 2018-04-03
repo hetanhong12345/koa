@@ -60,10 +60,15 @@ const loginRequired = () => {
         return next();
     };
 }
-
+const page404 = () => {
+    return async (ctx) => {
+        ctx.body = {code: 404, msg: 'not found'};
+    }
+};
 module.exports = {
     cors,
     result,
-    loginRequired
+    loginRequired,
+    page404
 };
 
