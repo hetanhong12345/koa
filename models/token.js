@@ -3,12 +3,10 @@
  */
 const bs = require('../bs');
 const Token = bs.Model.extend({
+    hasTimestamps: true,
     tableName: 'tokens',
     constructor: function () {
         bs.Model.apply(this, arguments);
-        this.on('saving', (model, attrs, options) => {
-            model.set('updated_at', new Date())
-        });
     }
 });
 module.exports = Token;

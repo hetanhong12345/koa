@@ -28,8 +28,7 @@ user.openAccount = async (uuid) => {
         let account = new Account({user_uuid: uuid});
         await account.save(null, {transacting: trx});
         let user = await  new User({uuid: uuid}).fetch();
-        user.set('status', 1);
-        return user.save(null, {transacting: trx});
+        return user.save({status: 1}, {transacting: trx, patch: true});
     });
 };
 module.exports = user;

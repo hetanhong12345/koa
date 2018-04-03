@@ -38,9 +38,9 @@ trade.recharge = async (data) => {
 
         }
         amount = parseFloat(amount) + parseFloat(ac.get('amount'))
-        ac.set('amount', amount);
+
         // 更新账户余额
-        return await ac.save(null, {transacting: trx});
+        return await ac.save({amount}, {transacting: trx, patch: true});
 
     });
 };
@@ -69,9 +69,8 @@ trade.withdraw = async (data) => {
         bill.set('amount', amount);
         await bill.save(null, {transacting: trx}); // 插入一条提现记录
         amount = parseFloat(ac.get('amount')) - parseFloat(amount)
-        ac.set('amount', amount);
         // 更新账户余额
-        return await ac.save(null, {transacting: trx});
+        return await ac.save({amount}, {transacting: trx, patch: true});
     });
 };
 // 转账
@@ -116,8 +115,8 @@ trade.transfer = async (data) => {
 
 
         // 对方账户增加余额
-        otherAc.set('amount', otherAmount);
-        await otherAc.save(null, {transacting: trx});
+
+        await otherAc.save({amount: otherAmount}, {transacting: trx, patch: true});
 
         // 自己的账单增加一条转出记录
         let selfBill = new Bill({user_uuid: uuid});
@@ -136,8 +135,7 @@ trade.transfer = async (data) => {
         await otherBill.save(null, {transacting: trx});
 
         // 自己账户减掉余额
-        ac.set('amount', selfAmount);
-        return ac.save(null, {transacting: trx});
+        return ac.save({amount: selfAmount}, {transacting: trx, patch: true});
     });
 };
 module.exports = trade;

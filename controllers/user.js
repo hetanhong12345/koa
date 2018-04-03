@@ -42,7 +42,7 @@ user.register = async (ctx) => {
     }
     userInfo = userInfo.toJSON();
     let sessionId = uuidV4();
-    updateSession(userInfo.uuid, sessionId);
+    updateSession(userInfo.uuid, sessionId).then();
     ctx.cookies.set('Authentication', sessionId, cookieProps);
     Redis.hmset(sessionId, userInfo);
     return userInfo;
@@ -72,7 +72,7 @@ user.login = async (ctx) => {
     userInfo = userInfo.toJSON();
     let sessionId = uuidV4();
     let {uuid} = userInfo;
-    updateSession(uuid, sessionId);
+    updateSession(uuid, sessionId).then();
     ctx.cookies.set('Authentication', sessionId, cookieProps);
     Redis.hmset(sessionId, userInfo, 'EX', 60 * 60 * 1);
     return userInfo;
@@ -127,24 +127,14 @@ user.sendEmail = async () => {
  更新用户session
  删除redis中旧的 用户信息
  * */
-function updateSession(uuid, sessionId) {
-    return new Token({user_uuid: uuid}).fetch()
-        .then(token => {
-            if (token) {
-                let session = token.get('session');
-                Redis.del(session);
-                token.set('session', sessionId);
-                return token.save();
-            }
-            return false;
-        }).then(token => {
-            if (!token) {
-                token = new Token();
-                token.set('platform', 1);
-                token.set('user_uuid', uuid);
-                token.set('session', sessionId);
-                return token.save();
-            }
-        });
+async function updateSession(uuid, sessionId) {
+    let token = await new Token({user_uuid: uuid}).fetch();
+    if (token) {
+        let session = token.get('session');
+        Redis.del(session);
+        return token.save({session: sessionId}, {patch: true});
+    }
+    token = new Token();
+    return token.save({platform: 1, user_uuid: uuid, session: sessionId});
 };
 module.exports = user;
