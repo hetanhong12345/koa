@@ -3,7 +3,7 @@
 
 const socketIO = require('socket.io');
 const cookieParser = require('socket.io-cookie-parser')
-const Redis = require('../utils/redis-client');
+const redisClient = require('../utils/redis-client');
 function run(app) {
     let io = socketIO(app, {
         path: '/socket',
@@ -38,7 +38,7 @@ async function onConnect(socket) {
     let sessionId = socket.request.cookies.Authentication;
     let userInfo = await Redis.hgetall(sessionId);
     let {mobile} = userInfo;
-    Redis.set('socket' + mobile, socket.id);
+    redisClient.set('socket' + mobile, socket.id);
     socket.on('message', async (data) => {
         console.log(data);
         let {to} = data;

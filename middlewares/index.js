@@ -2,7 +2,7 @@
 // created:2018/4/2 15:42
 
 
-const Redis = require('../utils/redis-client');
+const redisClient = require('../utils/redis-client');
 
 const cors = () => {
     return async (ctx, next) => {
@@ -49,7 +49,7 @@ const loginRequired = () => {
         if (!session) {
             return {code: 401, msg: 'need login'};
         }
-        let userInfo = await Redis.hgetall(session);
+        let userInfo = await redisClient.hgetall(session);
         if (!userInfo) {
             return {
                 code: 401,

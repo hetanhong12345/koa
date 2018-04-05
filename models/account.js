@@ -1,12 +1,12 @@
 /**
  * Created by DELL on 2018/2/7.
  */
-const bs = require('../bs');
-const Account = bs.Model.extend({
+const bookshelf = require('../utils/bookshelf');
+const Account = bookshelf.Model.extend({
     hasTimestamps: true,
     tableName: 'accounts',
     constructor: function () {
-        bs.Model.apply(this, arguments);
+        bookshelf.Model.apply(this, arguments);
     }
 });
 module.exports = Account;

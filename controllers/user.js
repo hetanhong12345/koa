@@ -4,7 +4,7 @@
 * created date :2018-02-11
 * */
 const Token = require('../models/token');
-const Redis = require('../utils/redis-client');
+const redisClient = require('../utils/redis-client');
 const uuidV4 = require('uuid/v4');
 const userService = require('../services/user');
 const func = require('../utils/func');
@@ -44,7 +44,7 @@ user.register = async (ctx) => {
     let sessionId = uuidV4();
     updateSession(userInfo.uuid, sessionId).then();
     ctx.cookies.set('Authentication', sessionId, cookieProps);
-    Redis.hmset(sessionId, userInfo);
+    redisClient.hmset(sessionId, userInfo);
     return userInfo;
 };
 user.login = async (ctx) => {
@@ -74,12 +74,12 @@ user.login = async (ctx) => {
     let {uuid} = userInfo;
     updateSession(uuid, sessionId).then();
     ctx.cookies.set('Authentication', sessionId, cookieProps);
-    Redis.hmset(sessionId, userInfo, 'EX', 60 * 60 * 1);
+    redisClient.hmset(sessionId, userInfo, 'EX', 60 * 60 * 1);
     return userInfo;
 };
 user.logout = async (ctx) => {
     let session = ctx.cookies.get('Authentication');
-    Redis.del(session);
+    redisClient.del(session);
     let logoutCookie = {...cookieProps};
     logoutCookie.maxAge = 0;
     ctx.cookies.set('Authentication', '', logoutCookie);
@@ -101,7 +101,7 @@ user.openAccount = async (ctx) => {
     // 更新redis 用户信息
     info = info.toJSON();
     let sessionId = ctx.cookies.get('Authentication');
-    Redis.hmset(sessionId, info, 'EX', 60 * 60 * 1);
+    redisClient.hmset(sessionId, info, 'EX', 60 * 60 * 1);
     return info;
 };
 user.sendEmail = async () => {
@@ -131,7 +131,7 @@ async function updateSession(uuid, sessionId) {
     let token = await new Token({user_uuid: uuid}).fetch();
     if (token) {
         let session = token.get('session');
-        Redis.del(session);
+        redisClient.del(session);
         return token.save({session: sessionId}, {patch: true});
     }
     token = new Token();

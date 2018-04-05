@@ -1,14 +1,14 @@
 /**
  * Created by DELL on 2018/2/8.
  */
-const bs = require('../bs');
+const bookshelf = require('../utils/bookshelf');
 const func = require('../utils/func');
 
 
-const Bill = bs.Model.extend({
+const Bill = bookshelf.Model.extend({
     tableName: 'bills',
     constructor: function () {
-        bs.Model.apply(this, arguments);
+        bookshelf.Model.apply(this, arguments);
         this.on('creating', (model, attrs, options) => {
             model.set('number', func.createBillNumber());
         });
