@@ -43,7 +43,7 @@ user.register = async (ctx) => {
     userInfo = userInfo.toJSON();
     let sessionId = uuidV4();
     updateSession(userInfo.uuid, sessionId).then();
-    ctx.cookies.set('Authentication', sessionId, cookieProps);
+    ctx.cookies.set('authentication', sessionId, cookieProps);
     redisClient.hmset(sessionId, userInfo);
     return userInfo;
 };
@@ -73,16 +73,16 @@ user.login = async (ctx) => {
     let sessionId = uuidV4();
     let {uuid} = userInfo;
     updateSession(uuid, sessionId).then();
-    ctx.cookies.set('Authentication', sessionId, cookieProps);
+    ctx.cookies.set('authentication', sessionId, cookieProps);
     redisClient.hmset(sessionId, userInfo, 'EX', 60 * 60 * 1);
     return userInfo;
 };
 user.logout = async (ctx) => {
-    let session = ctx.cookies.get('Authentication');
+    let session = ctx.cookies.get('authentication');
     redisClient.del(session);
     let logoutCookie = {...cookieProps};
     logoutCookie.maxAge = 0;
-    ctx.cookies.set('Authentication', '', logoutCookie);
+    ctx.cookies.set('authentication', '', logoutCookie);
     return 'ok';
 };
 user.userInfo = async (ctx) => {
@@ -100,7 +100,7 @@ user.openAccount = async (ctx) => {
     let info = await userService.openAccount(userInfo.uuid);
     // 更新redis 用户信息
     info = info.toJSON();
-    let sessionId = ctx.cookies.get('Authentication');
+    let sessionId = ctx.cookies.get('authentication');
     redisClient.hmset(sessionId, info, 'EX', 60 * 60 * 1);
     return info;
 };

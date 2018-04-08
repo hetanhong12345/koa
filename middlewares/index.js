@@ -45,7 +45,7 @@ const result = () => {
 
 const loginRequired = () => {
     return async (ctx, next) => {
-        let session = ctx.cookies.get('Authentication');
+        let session = ctx.cookies.get('authentication');
         if (!session) {
             return {code: 401, msg: 'need login'};
         }

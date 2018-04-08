@@ -17,10 +17,10 @@ function run(app) {
     io.use((socket, next) => {
         console.log(socket.request.cookies);
 
-        if (socket.request.cookies.Authentication) {
+        if (socket.request.cookies.authentication) {
             next();
         } else {
-            next(new Error('Authentication error'));
+            next(new Error('authentication error'));
         }
 
 
@@ -35,7 +35,7 @@ function run(app) {
 async function onConnect(socket) {
     console.log(socket.id);
     // ...
-    let sessionId = socket.request.cookies.Authentication;
+    let sessionId = socket.request.cookies.authentication;
     let userInfo = await redisClient.hgetall(sessionId);
     let {mobile} = userInfo;
     redisClient.set('socket' + mobile, socket.id);
