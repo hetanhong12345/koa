@@ -36,7 +36,7 @@ async function onConnect(socket) {
     console.log(socket.id);
     // ...
     let sessionId = socket.request.cookies.Authentication;
-    let userInfo = await Redis.hgetall(sessionId);
+    let userInfo = await redisClient.hgetall(sessionId);
     let {mobile} = userInfo;
     redisClient.set('socket' + mobile, socket.id);
     socket.on('message', async (data) => {
@@ -46,7 +46,7 @@ async function onConnect(socket) {
             socket.emit('message', 'to should not be  none', 'reply');
             return false;
         }
-        let socketID = await  Redis.get('socket' + to);
+        let socketID = await  redisClient.get('socket' + to);
         if (socketID) {
             socket.to(socketID).emit('message', data.msg, 'reply');
         }

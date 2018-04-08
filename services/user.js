@@ -3,7 +3,7 @@
  */
 const User = require('../models/user');
 const Account = require('../models/account');
-const bookshelf = require('../bs');
+const bookshelf = require('../utils/bookshelf');
 const user = {};
 user.register = async (data) => {
     let {mobile, password, user_name} = data;

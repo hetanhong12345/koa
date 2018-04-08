@@ -1,7 +1,7 @@
 const Account = require('../models/account');
 const Bill = require('../models/bill');
 const User = require('../models/user');
-const bookshelf = require('../bs');
+const bookshelf = require('../utils/bookshelf');
 const trade = {};
 // 交易记录
 trade.billList = async (data) => {
