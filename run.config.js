@@ -1,7 +1,7 @@
 module.exports = {
     apps: [{
         name: "dev",
-        script: "app.js",
+        script: "server.js",
         watch: true,
         env: {
             "NODE_ENV": "development",
@@ -13,21 +13,21 @@ module.exports = {
     },
         {
             name: "test",
-            script: "app.js",
+            script: "server.js",
             env: {
                 "NODE_ENV": "test",
             }
         },
         {
             name: "stage",
-            script: "app.js",
+            script: "server.js",
             env: {
                 "NODE_ENV": "stage",
             }
         },
         {
             name: "build",
-            script: "app.js",
+            script: "server.js",
             env: {
                 "NODE_ENV": "production",
             }
