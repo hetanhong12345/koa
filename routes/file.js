@@ -6,8 +6,10 @@ const file = new Router();
 const koaBody = require('koa-body');
 const fileController = require('../controllers/file');
 //
-file.use(koaBody({multipart: true}));
-file.post('/upload', async (ctx) => {
+file.post('/upload', koaBody({multipart: true}), async (ctx) => {
     return fileController.upload(ctx);
 });
+file.get('/download', async (ctx) => {
+    return fileController.download(ctx);
+})
 module.exports = file;
