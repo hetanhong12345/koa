@@ -3,8 +3,6 @@
 * author:hth
 * created date :2018-02-11
 * */
-const fs = require('fs');
-const path = require('path');
 const fileService = require('../services/file');
 const file = {};
 file.upload = async (ctx) => {
