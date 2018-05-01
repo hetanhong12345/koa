@@ -23,12 +23,6 @@ trade.billList = async (data) => {
 trade.recharge = async (data) => {
     let {uuid, amount} = data;
     return bookshelf.transaction(async (trx) => {
-        let bill = new Bill({user_uuid: uuid});
-        bill.set('type', 1);
-        bill.set('description', '充值');
-        bill.set('amount', amount);
-        await bill.save(null, {transacting: trx}); // 插入一条充值记录
-
         let ac = await  new Account({user_uuid: uuid}).fetch();
         if (!ac) {
             return {
@@ -37,8 +31,12 @@ trade.recharge = async (data) => {
             };
 
         }
+        let bill = new Bill({user_uuid: uuid});
+        bill.set('type', 1);
+        bill.set('description', '充值');
+        bill.set('amount', amount);
+        await bill.save(null, {transacting: trx}); // 插入一条充值记录
         amount = parseFloat(amount) + parseFloat(ac.get('amount'))
-
         // 更新账户余额
         return await ac.save({amount}, {transacting: trx, patch: true});
 

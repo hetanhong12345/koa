@@ -30,4 +30,8 @@ function moveFile(file, filepath) {
     })
 }
 
+file.download = async () => {
+    let filepath = path.resolve(__dirname, path.join(`../static`, `js/test.js`));
+    return fs.createReadStream(filepath)
+};
 module.exports = file;

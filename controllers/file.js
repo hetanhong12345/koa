@@ -15,4 +15,9 @@ file.upload = async (ctx) => {
     }
     return fileService.upload(files);
 };
+file.download = async (ctx) => {
+    ctx.set('Content-type', 'application/octet-stream')
+    ctx.set('Content-Disposition', 'attachment;filename=test.js')
+    ctx.body = fileService.download()
+};
 module.exports = file
