@@ -3,13 +3,13 @@
  */
 const Koa = require('koa');
 const path = require('path');
-const static = require('koa-static');
+const koaStatic = require('koa-static');
 const app = new Koa();
 
 
 // 静态资源目录对于相对入口文件app.js的路径
 const staticPath = './static';
-app.use(static(path.join(__dirname, staticPath)));
+app.use(koaStatic(path.join(__dirname, staticPath)));
 
 // 使用ctx.body解析中间件
 const bodyParser = require('koa-bodyparser');

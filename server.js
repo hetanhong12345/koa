@@ -8,7 +8,7 @@ const server = http.createServer(app.callback());
 socket.run(server);
 
 // start server at port 3000
-var port = parseInt(process.env.PORT || '3100', 10);
+const port = parseInt(process.env.PORT || '3100', 10);
 server.listen(port, () => {
-    console.log('koa&scoket application  is starting at port 3100')
+    console.log('koa application  is starting at port 3100')
 });
