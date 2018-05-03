@@ -296,3 +296,180 @@ var searchRange = function (nums = [], target) {
 };
 
 searchRange([1, 2, 3, 4, 5, 6, 6, 7, 8], 6)
+
+
+var maximalRectangle = function (matrix) {
+    var len = matrix.length;
+    if (!len) {
+        return 0;
+    }
+    let subLen = matrix[0].length;
+    if (!subLen) {
+        return 0;
+    }
+    for (let i = 0; i < len; i++) {
+        for (let j = 0; j < subLen; j++) {
+            matrix[i][j] = parseInt(matrix[i][j]);
+            if (matrix[i][j] == 1 && (i > 0)) {
+                matrix[i][j] = (matrix[i - 1][j]) + 1;
+            }
+        }
+    }
+    let maxArea = 0;
+    for (let i = 0; i < len; i++) {
+        let area = rectArea(matrix[i]);
+        maxArea = Math.max(area, maxArea);
+    }
+    return maxArea;
+
+};
+
+function rectArea(arr) {
+    var maxArea = 0, tpIndex = 0, i = 0;
+    var stack = [];
+    var len = arr.length;
+    while (i < len) {
+        if (stack.length == 0 || arr[i] >= arr[stack[stack.length - 1]]) {
+            stack.push(i++);
+        } else {
+            tpIndex = stack.pop();
+            let area = arr[tpIndex] * (stack.length == 0 ? i : i - stack[stack.length - 1] - 1);
+            maxArea = Math.max(area, maxArea);
+        }
+    }
+
+    while (stack.length) {
+        tpIndex = stack.pop();
+        let area = arr[tpIndex] * (stack.length == 0 ? i : i - stack[stack.length - 1] - 1);
+        maxArea = Math.max(area, maxArea);
+    }
+    return maxArea;
+
+
+}
+
+var matrix = [
+    ["1", "0", "1", "0", "0"],
+    ["1", "0", "1", "1", "1"],
+    ["1", "1", "1", "1", "1"],
+    ["1", "0", "0", "1", "0"]
+];
+console.log('---->', maximalRectangle(matrix));
+
+function wordBreak(s = '', wordDict = []) {
+    if (s.length == 0) {
+        return true;
+    }
+    if (wordDict.length == 0) {
+        return false;
+    }
+    let dp = [true];
+    for (let i = 1; i <= s.length; i++) {
+        for (let j = i - 1; j >= 0; j--) {
+            if (dp[j]) {
+                let word = s.substr(j, i - j);
+                if (wordDict.indexOf(word) != -1) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+    }
+    console.log(dp);
+
+    return !!dp[s.length];
+}
+
+
+console.log(wordBreak('leetcode', ["leet", "code"]));
+
+
+var largestIsland = function (grid) {
+    let len = grid.length;
+    if (!len) {
+        return 0;
+    }
+    var xy = [];
+    for (let i = 0; i < len; i++) {
+        xy.push([]);
+    }
+    var arr = [];
+    let max = 0;
+    let color = 1;
+    for (let i = 0; i < len; i++) {
+        for (let j = 0; j < len; j++) {
+            if (grid[i][j] == 1 && !xy[i][j]) {
+                arr = [];
+                let value = deep(i, j, color++);
+                if (value > max) {
+                    max = value;
+                }
+                spread(arr, value)
+            }
+        }
+    }
+
+    for (let i = 0; i < len; i++) {
+        for (let j = 0; j < len; j++) {
+            if (grid[i][j] == 0) {
+                let value = 1;
+                let colors = {};
+                if (i > 0 && grid[i - 1][j]) {
+                    value += grid[i - 1][j];
+                    colors[xy[i - 1][j]] = true;
+                }
+                if (i < len - 1 && grid[i + 1][j]) {
+                    if (!colors[xy[i + 1][j]]) {
+                        value += grid[i + 1][j];
+
+                        colors[xy[i + 1][j]] = true;
+                    }
+                }
+                if (j > 0 && grid[i][j - 1]) {
+                    if (!colors[xy[i][j - 1]]) {
+                        value += grid[i][j - 1];
+                        colors[xy[i][j - 1]] = true;
+                    }
+
+                }
+                if (j < len - 1 && grid[i][j + 1]) {
+                    if (!colors[xy[i][j + 1]]) {
+                        value += grid[i][j + 1];
+                        colors[xy[i][j + 1]] = true;
+                    }
+
+                }
+                if (value > max) {
+                    max = value;
+                }
+
+            }
+        }
+    }
+    return max;
+
+    function spread(arr, value) {
+        for (let ij of arr) {
+            grid[ij['x']][ij['y']] = value;
+        }
+    }
+
+    function deep(x, y, color) {
+        if (x < 0 || y < 0 || x >= len || y >= len) {
+            return 0;
+        }
+        if (grid[x][y] == 0) {
+            return 0;
+        }
+
+        if (xy[x][y]) {
+            return 0;
+        }
+        xy[x][y] = color;
+        arr.push({x, y});
+        return 1 + deep(x - 1, y, color) + deep(x + 1, y, color) + deep(x, y - 1, color) + deep(x, y + 1, color);
+    }
+
+};
+
+console.log(largestIsland([[1, 0, 0], [1, 0, 1], [0, 1, 1]]));
