@@ -473,3 +473,333 @@ var largestIsland = function (grid) {
 };
 
 console.log(largestIsland([[1, 0, 0], [1, 0, 1], [0, 1, 1]]));
+
+var maxProduct = function (nums = []) {
+    let len = nums.length;
+    if (len === 0) {
+        return 0
+    }
+    if (len == 1) {
+        return nums[0];
+    }
+    let max = nums[0];
+
+    let preL = nums[0], preR = nums[0]
+    for (let i = 1; i < len; i++) {
+        let l = Math.min(nums[i], nums[i] * preL, nums[i] * preR);
+        let r = Math.max(nums[i], nums[i] * preL, nums[i] * preR);
+        preL = l;
+        preR = r;
+
+        if (r > max) {
+            max = r;
+        }
+    }
+    // console.log('max===', max);
+    // console.log('result===', result);
+    return max;
+
+};
+maxProduct([0, 3]);
+
+var rob = function (nums) {
+
+
+    let len = nums.length;
+    if (len === 0) {
+        return 0;
+    }
+
+    if (len <= 3) {
+        return Math.max(...nums);
+    }
+    return Math.max(getMax(nums.slice(0, -1)), getMax(nums.slice(1)))
+
+    function getMax(nums) {
+        let len = nums.length;
+        if (len === 0) {
+            return 0;
+        }
+        let max = nums[0];
+        if (len < 3) {
+            return Math.max(...nums);
+        }
+
+        nums[2] = nums[2] + nums[0];
+        if (len == 3) {
+            return Math.max(...nums);
+        }
+        max = Math.max(nums[2], max);
+        for (let i = 3; i < len; i++) {
+            nums[i] += Math.max(nums[i - 2], nums[i - 3]);
+            if (nums[i] > max) {
+                max = nums[i];
+            }
+        }
+        //console.log('rob max===', max);
+        return max;
+    }
+};
+rob([2, 7, 9, 3, 1]);
+
+
+var maximalSquare = function (matrix) {
+    let len = matrix.length;
+    if (len == 0) {
+        return 0
+    }
+    let subLen = matrix[0].length;
+    if (subLen == 0) {
+        return 0;
+    }
+    let max = 0;
+    for (let i = 0; i < len; i++) {
+        for (let j = 0; j < subLen; j++) {
+            if (matrix[i][j] == 1) {
+                max = Math.max(1, max);
+                if (i >= 1 && j >= 1) {
+                    matrix[i][j] = Math.min(matrix[i - 1][j - 1], matrix[i][j - 1], matrix[i - 1][j]) + 1;
+                    if (matrix[i][j] > max) {
+                        max = matrix[i][j];
+                    }
+                }
+            }
+
+        }
+    }
+    return max * max;
+
+};
+maximalSquare([["1", "0", "1", "0", "0"], ["1", "0", "1", "1", "1"], ["1", "1", "1", "1", "1"], ["1", "0", "0", "1", "0"]])
+
+
+var largeGroupPositions = function (S) {
+    let result = [];
+    let len = S.length;
+    let char = S[0], index = 0, max = 1;
+    for (let i = 1; i < len; i++) {
+        if (S[i] === char) {
+            max++;
+            // last char
+            if (i === len - 1) {
+                if (max >= 3) {
+                    result.push([index, i]);
+                }
+            }
+        } else {
+            if (max >= 3) {
+                result.push([index, i - 1]);
+            }
+            index = i;
+            char = S[i];
+            max = 1;
+        }
+
+    }
+    console.log('result===', result);
+    return result;
+
+};
+largeGroupPositions('abbbcdddeeee');
+
+
+var numberOfLines = function (widths, S) {
+    let line = 1, units, sum = 0;
+    for (let char of S) {
+        let index = char.charCodeAt(0) - 97;
+        let all = sum + widths[index];
+        if (all === 100) {
+            sum = 0;
+            line++;
+            continue;
+        }
+        if (all > 100) {
+            sum = widths[index];
+            line++;
+            continue;
+        }
+        sum = all;
+
+    }
+    units = sum;
+    return [line, units];
+
+};
+numberOfLines([4, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10], 'bbbcccdddaaa');
+
+var uniqueMorseRepresentations = function (words) {
+    let translates = [".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.."]
+    let results = [];
+    for (let word of words) {
+        let strArr = word.split('');
+        strArr = strArr.map(el => translates[el.charCodeAt(0) - 97]);
+        console.log(strArr);
+        let str = strArr.join('');
+        if (results.includes(str)) {
+            continue;
+        }
+        results.push(str);
+
+    }
+    return results.length;
+};
+
+uniqueMorseRepresentations(["gin", "zen", "gig", "msg"]);
+
+
+var maxIncreaseKeepingSkyline = function (grid) {
+    let len = grid.length;
+    let oringal = 0;
+    let resultGrid = [];
+    for (let i = 0; i < len; i++) {
+        resultGrid.push(new Array(len).fill(0));
+    }
+    let skylines = [], maxLeft = [], maxTop = [];
+    let maxObj = {}
+    for (let i = 0; i < len; i++) {
+        maxObj = {
+            val: grid[i][0],
+            x: i,
+            y: 0
+        }
+        for (let j = 0; j < len; j++) {
+            oringal += grid[i][j];
+            if (grid[i][j] > maxObj.val) {
+                maxObj = {
+                    val: grid[i][j],
+                    x: i,
+                    y: j
+                }
+            }
+
+        }
+        if (!resultGrid[maxObj.x][maxObj.y]) {
+            skylines.push(maxObj);
+        }
+        resultGrid[maxObj.x][maxObj.y] = maxObj.val;
+        maxLeft[i] = maxObj.val;
+    }
+
+    for (let i = 0; i < len; i++) {
+        maxObj = {
+            val: grid[0][i],
+            x: 0,
+            y: i
+        }
+        for (let j = 0; j < len; j++) {
+
+            if (grid[j][i] > maxObj.val) {
+                maxObj = {
+                    val: grid[j][i],
+                    x: j,
+                    y: i
+                }
+            }
+
+        }
+        if (!resultGrid[maxObj.x][maxObj.y]) {
+            skylines.push(maxObj);
+        }
+        resultGrid[maxObj.x][maxObj.y] = maxObj.val;
+        maxTop[i] = maxObj.val;
+    }
+
+    skylines.sort((a, b) => {
+        return a.val > b.val ? 1 : -1;
+    });
+    skylines.map(el => {
+        let {val, x, y} = el;
+        if (maxLeft[x] === val) {
+            fillX(resultGrid, x, val);
+        }
+        if (maxTop[y] === val) {
+            fillY(resultGrid, y, val);
+        }
+    });
+
+    function fillX(Grid, x, val) {
+        for (let i = 0; i < len; i++) {
+            if (Grid[x][i] === 0) {
+                Grid[x][i] = val
+            }
+        }
+    }
+
+    function fillY(Grid, y, val) {
+        for (let i = 0; i < len; i++) {
+            if (Grid[i][y] === 0) {
+                Grid[i][y] = val
+            }
+        }
+    }
+
+    /*console.log(skylines);
+    console.log(maxLeft);
+    console.log(maxTop);
+    console.log(resultGrid);*/
+    let result = 0;
+    for (let i = 0; i < len; i++) {
+        for (let j = 0; j < len; j++) {
+            result += resultGrid[i][j];
+        }
+    }
+    return result - oringal;
+};
+maxIncreaseKeepingSkyline([[3, 0, 8, 4], [2, 4, 5, 7], [9, 2, 6, 3], [0, 3, 1, 0]])
+
+
+var splitArraySameAverage = function (A) {
+    let sum = 0, avg, len = A.length, distance = 0.00001;
+    for (let num of A) {
+        sum += num;
+    }
+    avg = sum / len;
+    let avgs = [{
+        val: A[0],
+        total: 1
+    }]
+    for (let i = 1; i < len - 1; i++) {
+        if (Math.abs(A[i] - avg) <= distance) {
+            return true;
+        }
+        let tempAvgs = [];
+        if (isNotIn(A[i], 1)) {
+            tempAvgs.push({
+                val: A[i],
+                total: 1
+            });
+        }
+        let avs =[...avgs]
+        for (let avgObj of avs) {
+            let tempSum = A[i] + avgObj.val;
+            let tempAvg = tempSum / (avgObj.total + 1);
+            if (Math.abs(tempAvg - avg) <= distance) {
+                return true;
+            }
+            if (isNotIn(tempSum, avgObj.total + 1)) {
+                avgs.push({
+                    val: tempSum,
+                    total: avgObj.total + 1
+                });
+            }
+
+        }
+    }
+    return false;
+
+    function isNotIn(val, total) {
+        if (total > Math.ceil(len / 2)) {
+            return false;
+        }
+        for (let avg of avgs) {
+            if (avg.val == val && avg.total == total) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+};
+
+console.log(splitArraySameAverage([3863, 703, 1799, 327, 3682, 4330, 3388, 6187, 5330, 6572, 938, 6842, 678, 9837, 8256, 6886, 2204, 5262, 6643, 829, 745, 8755, 3549, 6627]))
+
