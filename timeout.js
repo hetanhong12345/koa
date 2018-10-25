@@ -10,11 +10,11 @@
  * @param {ListNode} l2
  * @return {ListNode}
  */
-var addTwoNumbers = function (l1, l2) {
-    if (!l1 || l1.val == 0) {
+let addTwoNumbers = function (l1, l2) {
+    if (!l1 || l1.val === 0) {
         return l2
     }
-    if (!l2 || l2.val == 0) {
+    if (!l2 || l2.val === 0) {
         return l1;
     }
     let head1 = l1;
@@ -32,7 +32,7 @@ var addTwoNumbers = function (l1, l2) {
             temp.val = result;
             add = 0;
         }
-        console.log(temp)
+        console.log(temp);
         if (head1.next && head2.next) {
             head1 = head1.next;
             head2 = head2.next;
@@ -46,7 +46,7 @@ var addTwoNumbers = function (l1, l2) {
     }
     console.log(add);
     if (!head1.next && !head2.next) {
-        if (add == 1) {
+        if (add === 1) {
             console.log('bbb');
             temp.next = new ListNode(1);
         }
@@ -58,7 +58,7 @@ var addTwoNumbers = function (l1, l2) {
     if (head2.next) {
         temp.next = head2.next;
     }
-    if (add == 0) {
+    if (add === 0) {
         return head;
     }
 
@@ -72,7 +72,7 @@ var addTwoNumbers = function (l1, l2) {
             add = 1;
         } else {
             temp.val = 0;
-            temp.next = new ListNode(1)
+            temp.next = new ListNode(1);
             add = 0;
             return head
 
@@ -89,16 +89,16 @@ function ListNode(val) {
     this.val = val;
     this.next = null;
 
-};
-var l1 = new ListNode(1);
+}
+let l1 = new ListNode(1);
 
 
-var l2 = new ListNode(9);
+let l2 = new ListNode(9);
 l2.next = new ListNode(8);
 console.log(addTwoNumbers(l1, l2));
 
 
-var lengthOfLongestSubstring = function (s) {
+let lengthOfLongestSubstring = function (s) {
     let map = {};
     let arr = [1];
     if (!s) {
@@ -141,14 +141,14 @@ var lengthOfLongestSubstring = function (s) {
 lengthOfLongestSubstring('abcbbdac');
 
 
-var isPalindrome = function (x) {
+let isPalindrome = function (x) {
     if (!x) {
         return true;
     }
     x = x.toString();
     let len = x.length;
     for (let i = 0; i < (len - 1) / 2 + 1; i++) {
-        if (x[i] != x[len - 1 - i]) {
+        if (x[i] !== x[len - 1 - i]) {
             return false;
         }
     }
@@ -156,8 +156,8 @@ var isPalindrome = function (x) {
     return true;
 
 };
-isPalindrome(-121)
-var maxArea = function (heights) {
+isPalindrome(-121);
+let maxArea = function (heights) {
     let max = 0;
     let len = heights.length;
     if (len <= 1) {
@@ -205,7 +205,7 @@ var maxArea = function (heights) {
 
 };
 console.log(maxArea([1, 1]));
-var isValid = function (s) {
+let isValid = function (s) {
     if (!s) {
         return true;
     }
@@ -221,10 +221,10 @@ var isValid = function (s) {
 
 
 };
-isValid('[()]')
+isValid('[()]');
 
 
-var digMap = {
+const digMap = {
     '2': 'abc',
     '3': 'def',
     '4': 'ghi',
@@ -233,14 +233,14 @@ var digMap = {
     '7': 'pqrs',
     '8': 'tuv',
     '9': 'wxyz'
-}
+};
 
-var letterCombinations = function (digits) {
+let letterCombinations = function (digits) {
     if (!digits) {
         return [];
     }
-    if (digits.length == 1) {
-        return [...digMap[digits]]
+    if (digits.length === 1) {
+        return [...digMap[digits]];
     }
 
     let lastDigit = digits[digits.length - 1];
@@ -255,9 +255,9 @@ var letterCombinations = function (digits) {
 console.log(letterCombinations('23456'));
 
 
-var searchRange = function (nums = [], target) {
+let searchRange = function (nums = [], target) {
     let result = [-1, -1];
-    if (nums.length == 0) {
+    if (nums.length === 0) {
         return result;
     }
     if (target < nums[0] || target > nums[nums.length - 1]) {
@@ -267,7 +267,7 @@ var searchRange = function (nums = [], target) {
     let l = 0, r = nums.length, m = Math.floor((l + r) / 2);
     let find = false;
     while (l < r) {
-        if (target == nums[m]) {
+        if (target === nums[m]) {
             find = true;
             break;
         }
@@ -284,10 +284,10 @@ var searchRange = function (nums = [], target) {
     }
     l = m;
     r = m;
-    while (l >= 0 && nums[l] == target) {
+    while (l >= 0 && nums[l] === target) {
         l--;
     }
-    while (r < nums.length && nums[r] == target) {
+    while (r < nums.length && nums[r] === target) {
         r++;
     }
     return [l + 1, r - 1];
@@ -295,4 +295,4 @@ var searchRange = function (nums = [], target) {
 
 };
 
-searchRange([1, 2, 3, 4, 5, 6, 6, 7, 8], 6)
+searchRange([1, 2, 3, 4, 5, 6, 6, 7, 8], 6);

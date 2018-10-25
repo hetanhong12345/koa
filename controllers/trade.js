@@ -21,7 +21,7 @@ trade.recharge = async (ctx) => {
     let {userInfo} = ctx;
     let {body} = ctx.request;
     let {amount} = body;
-    if (isNaN(amount) || amount <= 0) {
+    if (isNaN(Number(amount)) || amount <= 0) {
         return {
             code: 400,
             msg: 'amount is not a number'
@@ -35,7 +35,7 @@ trade.withdraw = async (ctx) => {
     let {userInfo} = ctx;
     let {body} = ctx.request;
     let {amount} = body;
-    if (isNaN(amount) || amount <= 0) {
+    if (isNaN(Number(amount)) || amount <= 0) {
         return {
             code: 400,
             msg: 'amount is not a number'
@@ -55,7 +55,7 @@ trade.transfer = async (ctx) => {
             msg: 'incorrect mobile'
         };
     }
-    if (isNaN(amount) || amount <= 0) {
+    if (isNaN(Number(amount)) || amount <= 0) {
 
         return {
             code: 5,
@@ -65,14 +65,14 @@ trade.transfer = async (ctx) => {
     let {userInfo} = ctx;
 
     let {uuid} = userInfo;
-    if (mobile == userInfo.mobile) {
+    if (mobile === userInfo.mobile) {
         return {
             code: 6,
             msg: 'can not transfer to yourself'
         };
     }
     // 未开户
-    if (userInfo.status != 1) {
+    if (userInfo.status !== 1) {
         return {
             code: 1,
             msg: 'user has not opened account'

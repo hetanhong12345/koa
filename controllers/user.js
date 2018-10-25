@@ -34,7 +34,7 @@ user.register = async (ctx) => {
         };
     }
     let userInfo = await userService.register({mobile, password, user_name});
-    if (userInfo.code == 402) {
+    if (userInfo.code === 402) {
         return {
             code: 402,
             msg: 'this mobile has registered'
@@ -63,7 +63,7 @@ user.login = async (ctx) => {
             msg: 'user is not exist'
         };
     }
-    if (password != userInfo.get('password')) {
+    if (password !== userInfo.get('password')) {
         return {
             code: 403,
             msg: 'password is incorrect'
@@ -91,7 +91,7 @@ user.userInfo = async (ctx) => {
 
 user.openAccount = async (ctx) => {
     let {userInfo} = ctx;
-    if (userInfo.status == 1) {
+    if (userInfo.status === 1) {
         return {
             code: 403,
             msg: 'account has already opened'
@@ -105,7 +105,7 @@ user.openAccount = async (ctx) => {
     return info;
 };
 user.sendEmail = async () => {
-    var mailOptions = {
+    let mailOptions = {
         from: '"何大炮" <13720057698@sina.cn>',
         to: 'hetanhong@zj-inv.cn',
         subject: 'Sending Email using Node.js',
